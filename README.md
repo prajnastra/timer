@@ -7,7 +7,7 @@ A simple cli timer with progress bar
 mkdir -p ~/.local/bin
 ```
 
-- Download the executable from [release](https://github.com/prajnastra/timer/releases/tag/v1) and paste it in `.local/bin`
+- Download the executable from [release](https://github.com/prajnastra/timer/releases/tag/v1) and paste it in `.local/bin` or you can build it from source.
 
 ### Usage
 ```bash
