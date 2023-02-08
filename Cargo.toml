@@ -7,3 +7,4 @@ edition = "2021"
 
 [dependencies]
 kbar = "0.1.3"
+rodio = "0.16.0"
