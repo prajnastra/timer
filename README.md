@@ -25,7 +25,7 @@ cd timer
 
 ## Building
 
-### Linux / Windows / BSD
+### Linux 
 
 ```sh
 cargo build --release
