@@ -1,8 +1,8 @@
 use kbar::Bar;
 use rodio::{source::Source, Decoder, OutputStream};
 use std::env;
-use std::fs::File;
 use std::io::BufReader;
+use std::io::Cursor;
 use std::str::FromStr;
 use std::thread::sleep;
 use std::time::Duration;
@@ -21,16 +21,23 @@ fn main() {
         bar.reach_percent(x);
     }
 
+    // Play alert sound
+    #[cfg(target_os = "windows")]
+    const MP3_FILE: &'static [u8] = include_bytes!("alert.mp3");
+
+    #[cfg(not(target_os = "windows"))]
+    const MP3_FILE: &'static [u8] = include_bytes!("alert.mp3");
+
     // Get a output stream handle to the default physical sound device
     let (_stream, stream_handle) = OutputStream::try_default().unwrap();
     // Load a sound from a file, using a path relative to Cargo.toml
-    let file = BufReader::new(File::open("assets/alert.mp3").unwrap());
+    let file = BufReader::new(Cursor::new(MP3_FILE));
     // Decode that sound file into a source
     let source = Decoder::new(file).unwrap();
     // Play the sound directly on the device
     stream_handle
         .play_raw(source.convert_samples())
-        .expect("Not able to play sound.");
+        .expect("Not able to play media");
 
     // The sound plays in a separate audio thread,
     sleep(Duration::from_secs(2));
