@@ -39,6 +39,6 @@ cp target/release/timer ~/.local/bin/
 
 ## Usage
 ```bash
-timer 00:00:10
+timer -t 00:00:10
 ```
 Currently it supports only one argument which will be in `hh:mm:ss` format.
