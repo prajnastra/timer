@@ -40,10 +40,10 @@ fn main() {
 #[derive(Parser, Debug)]
 #[command(author, version, about, long_about = None)]
 struct Args {
-    #[arg(short, long)]
+    #[arg(short, long, help = "Use time in hh:mm:ss format")]
     time: String,
 
-    #[arg(short, long, default_value_t = 0.5)]
+    #[arg(short, long, default_value_t = 0.5, help = "Volume of alert sound")]
     volume: f32,
 }
 
