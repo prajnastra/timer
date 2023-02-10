@@ -1,6 +1,6 @@
 use clap::Parser;
 use kbar::Bar;
-use rodio::{source::Source, Decoder, OutputStream};
+use rodio::{Decoder, OutputStream, Sink};
 use std::io::BufReader;
 use std::io::Cursor;
 use std::str::FromStr;
@@ -26,19 +26,15 @@ fn main() {
     #[cfg(not(target_os = "windows"))]
     const MP3_FILE: &'static [u8] = include_bytes!("alert.mp3");
 
-    // Get a output stream handle to the default physical sound device
     let (_stream, stream_handle) = OutputStream::try_default().unwrap();
-    // Load a sound from a file, using a path relative to Cargo.toml
-    let file = BufReader::new(Cursor::new(MP3_FILE));
-    // Decode that sound file into a source
-    let source = Decoder::new(file).unwrap();
-    // Play the sound directly on the device
-    stream_handle
-        .play_raw(source.convert_samples())
-        .expect("Not able to play media");
+    let sink = Sink::try_new(&stream_handle).unwrap();
 
-    // The sound plays in a separate audio thread,
-    sleep(Duration::from_secs(2));
+    let file = BufReader::new(Cursor::new(MP3_FILE));
+    let source = Decoder::new(file).unwrap();
+
+    sink.append(source);
+    sink.set_volume(args.volume);
+    sink.sleep_until_end();
 }
 
 #[derive(Parser, Debug)]
