@@ -19,6 +19,8 @@ fn main() {
         bar.reach_percent(x);
     }
 
+    println!("Finished 🥳️");
+
     // Play alert sound
     #[cfg(target_os = "windows")]
     const MP3_FILE: &'static [u8] = include_bytes!("alert.mp3");
