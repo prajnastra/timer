@@ -1,6 +1,6 @@
+use clap::Parser;
 use kbar::Bar;
 use rodio::{source::Source, Decoder, OutputStream};
-use std::env;
 use std::io::BufReader;
 use std::io::Cursor;
 use std::str::FromStr;
@@ -8,13 +8,11 @@ use std::thread::sleep;
 use std::time::Duration;
 
 fn main() {
-    let args: Vec<String> = env::args().collect();
-    let config = parse_config(&args);
-
-    let sleep_time = hms_to_seconds(config.query.as_str()) / 100.0;
-
+    let args = Args::parse();
+    let sleep_time = hms_to_seconds(args.time.as_str()) / 100.0;
     let mut bar = Bar::new();
-    bar.set_job_label(format!("Timer {} :", config.query).as_str());
+
+    bar.set_job_label(format!("Timer {} :", args.time).as_str());
 
     for x in 1..101 {
         sleep(Duration::from_secs_f64(sleep_time));
@@ -43,14 +41,14 @@ fn main() {
     sleep(Duration::from_secs(2));
 }
 
-struct Config {
-    query: String,
-}
+#[derive(Parser, Debug)]
+#[command(author, version, about, long_about = None)]
+struct Args {
+    #[arg(short, long)]
+    time: String,
 
-fn parse_config(args: &[String]) -> Config {
-    let query = args[1].clone();
-
-    Config { query }
+    #[arg(short, long, default_value_t = 0.5)]
+    volume: f32,
 }
 
 fn hms_to_seconds(s: &str) -> f64 {
