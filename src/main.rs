@@ -15,8 +15,8 @@ fn main() {
     bar.set_job_label(format!("Timer {} :", args.time).as_str());
 
     for x in 1..101 {
-        sleep(Duration::from_secs_f64(sleep_time));
         bar.reach_percent(x);
+        sleep(Duration::from_secs_f64(sleep_time));
     }
 
     println!("Finished 🥳️");
